@@ -19,6 +19,8 @@ import {
 //Number of user to generate
 const user: number = 100;
 
+// Name of user base that will be given to the file generated
+const fileName: string = "Security";
 
 //Qualification to create {Super Admin, Admin, Security Officer}
 const staticQualification: string = "Security Officer";
@@ -26,6 +28,10 @@ const staticQualification: string = "Security Officer";
 //Role level to assign{}
 const staticRole: number = 2;
 
+/**
+ * 
+ * @param numberOfUsers 
+ */
 const generateUserData = async (numberOfUsers: number) => {
     const hashedUserData: object[] = [];
     const unhashedUserData: object[] = [];
@@ -86,14 +92,14 @@ const generateUserData = async (numberOfUsers: number) => {
 
     // Export hashed user data to JSON
     const hashedUserDataJSON = JSON.stringify(hashedUserData);
-    fs.writeFileSync('../user-data/hashedUserData.json', hashedUserDataJSON);
+    fs.writeFileSync(`../user-data/hashed${fileName}Data.json`, hashedUserDataJSON);
 
     // Export unhashed user data to XLSX
     const unhashedUserDataExcel = xlsx.utils.json_to_sheet(unhashedUserData);
     const unhashedUserDataWorkbook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(unhashedUserDataWorkbook, unhashedUserDataExcel, 'UnhashedUserData');
-    xlsx.utils.book_append_sheet(unhashedUserDataWorkbook, { name: 'Sheet1' });
-    xlsx.writeFile(unhashedUserDataWorkbook, '../user-data/unhashedUserData.xlsx');
+    xlsx.utils.book_append_sheet(unhashedUserDataWorkbook, unhashedUserDataExcel, `Unhashed${fileName}Data`);
+    xlsx.utils.book_append_sheet(unhashedUserDataWorkbook, { name: `${fileName}` });
+    xlsx.writeFile(unhashedUserDataWorkbook, `../user-data/unhashed${fileName}Data.xlsx`);
 };
 
 generateUserData(user);

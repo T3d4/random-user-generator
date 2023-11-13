@@ -68,11 +68,11 @@ export const generateRandomRefreshToken = (): string => {
 };
 
 export const generateRandomLastName = (): string => {
-    const lastNames = ["David", "Ireoluwa", "Daniel", "Joshua", "Teda", "Miller"];
+    const lastNames = ["David", "Ireoluwa", "Daniel", "Joshua", "Teda", "Avida"];
     return getRandomItemFromArray(lastNames);
 };
 
 export const generateRandomFirstName = (): string => {
-    const firstNames = ["John", "Jane", "David", "Musk", "Michael", "Erioluwa"];
+    const firstNames = ["John", "Boye", "David", "Musk", "Michael", "Erioluwa"];
     return getRandomItemFromArray(firstNames);
 };
