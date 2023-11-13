@@ -48,7 +48,7 @@ const generateUserData = async (numberOfUsers: number) => {
     for (let i = 0; i < numberOfUsers; i++) {
         const firstName: string = generateRandomFirstName();
         const lastName: string = generateRandomLastName();
-        const email: string = `${firstName}.${lastName}@example.com`.toLowerCase();
+        const email: string = `${firstName}.${lastName}@patrolpulse.com`.toLowerCase();
         const mobile: string = generateRandomMobileNumber();
         const password: string = generateRandomPassword();
         const hash: string = hashPassword(password);
@@ -92,14 +92,14 @@ const generateUserData = async (numberOfUsers: number) => {
 
     // Export hashed user data to JSON
     const hashedUserDataJSON = JSON.stringify(hashedUserData);
-    fs.writeFileSync(`../user-data/hashed${fileName}Data.json`, hashedUserDataJSON);
+    fs.writeFileSync(`../user-data/hashed-${fileName.toLowerCase()}-data.json`, hashedUserDataJSON);
 
     // Export unhashed user data to XLSX
     const unhashedUserDataExcel = xlsx.utils.json_to_sheet(unhashedUserData);
     const unhashedUserDataWorkbook = xlsx.utils.book_new();
-    xlsx.utils.book_append_sheet(unhashedUserDataWorkbook, unhashedUserDataExcel, `Unhashed${fileName}Data`);
-    xlsx.utils.book_append_sheet(unhashedUserDataWorkbook, { name: `${fileName}` });
-    xlsx.writeFile(unhashedUserDataWorkbook, `../user-data/unhashed${fileName}Data.xlsx`);
+    xlsx.utils.book_append_sheet(unhashedUserDataWorkbook, unhashedUserDataExcel, `Unhashed-${fileName}-data`);
+    xlsx.utils.book_append_sheet(unhashedUserDataWorkbook, { name: `${fileName.toLowerCase()}` });
+    xlsx.writeFile(unhashedUserDataWorkbook, `../user-data/unhashed-${fileName.toLowerCase()}-data.xlsx`);
 };
 
 generateUserData(user);
