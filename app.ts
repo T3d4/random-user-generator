@@ -1,6 +1,5 @@
 import fs from "fs";
 import xlsx from "xlsx";
-import ora from "ora";
 import { hashPassword } from "./utils";
 import {
     generateLinearStaffNo,
@@ -16,8 +15,6 @@ import {
     generateStaticRole,
     generateRandomRefreshToken,
 } from "./generator-functions";
-
-
 
 
 //Number of user to generate
@@ -37,8 +34,9 @@ const staticRole: number = 2;
  * @param numberOfUsers 
  */
 const generateUserData = async (numberOfUsers: number) => {
-
-    const spinner = ora(`Generating ${fileName.toLowerCase()}'s data`).start();
+    // const oraImport = await import('ora');
+    // const ora = oraImport.default;
+    // const spinner = ora(`Generating ${fileName.toLowerCase()}'s data`).start();
     const hashedUserData: object[] = [];
     const unhashedUserData: object[] = [];
 
@@ -50,10 +48,10 @@ const generateUserData = async (numberOfUsers: number) => {
         fs.mkdirSync(userDirectoryPath);
     }
 
-
     for (let i = 0; i < numberOfUsers; i++) {
 
-        spinner.text = (`Generating data of ${i} ==> ${numberOfUsers}`);
+        // spinner.color = "magenta";
+        // spinner.text = (`Generating data of ${i} ==> ${numberOfUsers}`);
 
         const firstName: string = generateRandomFirstName();
         const lastName: string = generateRandomLastName();
@@ -98,6 +96,8 @@ const generateUserData = async (numberOfUsers: number) => {
             password,
         });
     }
+
+    // spinner.succeed(`User generation completed.`);
 
     // Export hashed user data to JSON
     const hashedUserDataJSON = JSON.stringify(hashedUserData);
