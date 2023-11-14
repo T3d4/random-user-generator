@@ -81,7 +81,7 @@ export const generateRandomRefreshToken = (): string => {
     return refreshToken;
 };
 
-export const generateMatricNo = (department: string, admissionYear: number) => {
+export const generateMatricNo = (department: string, admissionYear: number, counter: number) => {
     const departmentCounters: Record<string, Record<number, number>> = {};
 
     if (!departmentCounters[department]) {
@@ -89,7 +89,7 @@ export const generateMatricNo = (department: string, admissionYear: number) => {
     }
 
     if (!departmentCounters[department][admissionYear]) {
-        departmentCounters[department][admissionYear] = 1000;
+        departmentCounters[department][admissionYear] = counter;
     }
 
     const formattedAdmissionYear = admissionYear.toString().slice(-2);

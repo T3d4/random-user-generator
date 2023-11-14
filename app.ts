@@ -60,7 +60,7 @@ const generateUserData = async (numberOfUsers: number) => {
         const admissionYear: number = generateRandomAdmissionYear();
         const department: string = generateRandomDepartment();
         const fullName: string = `${generateRandomFirstName()} ${generateRandomLastName()}`
-        const matricNo: string = generateMatricNo(department, admissionYear);
+        const matricNo: string = generateMatricNo(department, admissionYear, 1000 + i);
         const phone: string = generateRandomMobileNumber();
 
         // spinner.color = "magenta";
