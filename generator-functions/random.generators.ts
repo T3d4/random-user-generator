@@ -5,10 +5,10 @@ export const generateRandomOTP = (): number => {
     return randomNumber < 1000 ? randomNumber + 1000 : randomNumber;
 };
 
-export const generateRandomAvailaiblity = (): string => {
-    const availabilities: string[] = ["Unavailable", "Available"];
-    return getRandomItemFromArray(availabilities);
-};
+// export const generateRandomAvailaiblity = (): string => {
+//     const availabilities: string[] = ["Unavailable", "Available"];
+//     return getRandomItemFromArray(availabilities);
+// };
 
 
 export const generateRandomProfile = (): string => {
@@ -65,6 +65,21 @@ export const generateRandomRefreshToken = (): string => {
     }
 
     return refreshToken;
+};
+
+//random last name, first name, email
+const usedEmails: Set<string> = new Set();
+
+export const generateUniqueEmail = (firstName: string, lastName: string): string => {
+    let email: string;
+
+    do {
+        email = `${firstName}.${lastName}@patrolpulse.com`.toLowerCase();
+    } while (usedEmails.has(email));
+
+    usedEmails.add(email);
+
+    return email;
 };
 
 export const generateRandomLastName = (): string => {

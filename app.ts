@@ -3,7 +3,6 @@ import xlsx from "xlsx";
 import { hashPassword } from "./utils";
 import {
     generateLinearStaffNo,
-    generateRandomAvailaiblity,
     generateRandomFirstName,
     generateRandomLastName,
     generateRandomMobileNumber,
@@ -14,6 +13,7 @@ import {
     getRandomBoolean,
     generateStaticRole,
     generateRandomRefreshToken,
+    generateUniqueEmail
 } from "./generator-functions";
 
 
@@ -55,16 +55,15 @@ const generateUserData = async (numberOfUsers: number) => {
 
         const firstName: string = generateRandomFirstName();
         const lastName: string = generateRandomLastName();
-        const email: string = `${firstName}.${lastName}@patrolpulse.com`.toLowerCase();
+        const email: string = generateUniqueEmail(firstName, lastName);
         const mobile: string = generateRandomMobileNumber();
         const password: string = generateRandomPassword();
         const hash: string = hashPassword(password);
-        const isAdmin: boolean = getRandomBoolean();
-        const isSupervisor: boolean = getRandomBoolean();
+        const isAdmin: boolean = false;
         const profile: string = generateRandomProfile();
         const role: number = generateStaticRole(staticRole);
         const qualifications: string = generateStaticQualification(staticQualification);
-        const availaiblity: string = generateRandomAvailaiblity();
+        const availaiblity: boolean = getRandomBoolean();
         const refreshtkn: string = generateRandomRefreshToken();
         const otp: number = generateRandomOTP();
         const otpExpiresBy = Date.now() + 60 * 1000;
@@ -80,7 +79,6 @@ const generateUserData = async (numberOfUsers: number) => {
             mobile,
             hash,
             isAdmin,
-            isSupervisor,
             profile,
             role,
             qualifications,

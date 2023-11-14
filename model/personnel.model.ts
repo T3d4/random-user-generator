@@ -29,10 +29,6 @@ const personnelSchema = new Schema<IPersonnel>(
             type: Boolean,
             default: false,
         },
-        isSupervisor: {
-            type: Boolean,
-            default: false,
-        },
         profile: {
             type: String,
         },
@@ -44,7 +40,7 @@ const personnelSchema = new Schema<IPersonnel>(
             type: String,
         },
         availaiblity: {
-            type: String,
+            type: Boolean,
         },
         refreshtkn: {
             type: String,
