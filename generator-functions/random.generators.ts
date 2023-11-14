@@ -1,3 +1,6 @@
+import * as fs from 'fs';
+import { firstNames, lastNames } from '../data';
+
 export const generateRandomOTP = (): number => {
     const min: number = 1000;
     const max: number = 9999;
@@ -68,7 +71,9 @@ export const generateRandomRefreshToken = (): string => {
 };
 
 //random last name, first name, email
-const usedEmails: Set<string> = new Set();
+const usedEmails: Set<string> = loadUsedEmails();
+
+const usedEmailsFileName = 'usedEmails.txt';
 
 export const generateUniqueEmail = (firstName: string, lastName: string): string => {
     let email: string;
@@ -78,16 +83,32 @@ export const generateUniqueEmail = (firstName: string, lastName: string): string
     } while (usedEmails.has(email));
 
     usedEmails.add(email);
+    saveUsedEmails();
 
     return email;
 };
 
+function loadUsedEmails(): Set<string> {
+    try {
+        const data = fs.readFileSync(usedEmailsFileName, 'utf-8');
+        const emailsArray = data.split('\n').map((email) => email.trim());
+        return new Set(emailsArray);
+    } catch (error) {
+        // If the file doesn't exist or there's an error, return an empty set
+        return new Set();
+    }
+}
+
+function saveUsedEmails() {
+    const emailsArray = Array.from(usedEmails);
+    const emailsString = emailsArray.join('\n');
+    fs.writeFileSync(usedEmailsFileName, emailsString, 'utf-8');
+}
+
 export const generateRandomLastName = (): string => {
-    const lastNames = ["David", "Ireoluwa", "Daniel", "Joshua", "Teda", "Avida"];
     return getRandomItemFromArray(lastNames);
 };
 
 export const generateRandomFirstName = (): string => {
-    const firstNames = ["John", "Boye", "David", "Musk", "Michael", "Erioluwa"];
     return getRandomItemFromArray(firstNames);
 };
