@@ -1,4 +1,5 @@
-import * as fs from 'fs';
+import path from 'path';
+import fs from 'fs/promises';
 import { firstNames, lastNames } from '../data';
 
 export const generateRandomOTP = (): number => {
@@ -25,6 +26,16 @@ export const getRandomBoolean = (): boolean => {
 
 export const generateRandomQualifications = (): string => {
     const qualifications: string[] = ["Super Admin", "Admin", "Security Officer"];
+    return getRandomItemFromArray(qualifications);
+};
+
+export const generateRandomDepartment = (): string => {
+    const qualifications: string[] = ["CSC", "ACC", "CYB", "SEN", "CA", "MBBS", "ARC", "ANA"];
+    return getRandomItemFromArray(qualifications);
+};
+
+export const generateRandomAdmissionYear = (): number => {
+    const qualifications: number[] = [2018, 2019, 2020, 2021, 2022, 2023];
     return getRandomItemFromArray(qualifications);
 };
 
@@ -70,27 +81,59 @@ export const generateRandomRefreshToken = (): string => {
     return refreshToken;
 };
 
+export const generateMatricNo = (department: string, admissionYear: number) => {
+    const departmentCounters: Record<string, Record<number, number>> = {};
+
+    if (!departmentCounters[department]) {
+        departmentCounters[department] = {};
+    }
+
+    if (!departmentCounters[department][admissionYear]) {
+        departmentCounters[department][admissionYear] = 1000;
+    }
+
+    const formattedAdmissionYear = admissionYear.toString().slice(-2);
+    const paddedCounter = departmentCounters[department][admissionYear].toString();
+    const matricNo = `BU${formattedAdmissionYear}${department.toUpperCase()}${paddedCounter}`;
+
+    departmentCounters[department][admissionYear]++;
+
+    return matricNo;
+}
+
 //random last name, first name, email
-const usedEmails: Set<string> = loadUsedEmails();
 
-const usedEmailsFileName = 'usedEmails.txt';
+const usedEmailsFileName = '../user-data/usedEmails.txt';
+const usedEmailsFilePath = '../user-data/usedEmails.txt';
 
-export const generateUniqueEmail = (firstName: string, lastName: string): string => {
+let usedEmails: Set<string>;
+
+export const generateUniqueEmail = async (firstName: string, lastName: string): Promise<string> => {
     let email: string;
+    await loadUsedEmails().then((emails) => {
+        usedEmails = emails;
+    })
 
+    try {
+        await fs.access(path.dirname(usedEmailsFilePath));
+    } catch (dirErr) {
+        await fs.mkdir(path.dirname(usedEmailsFilePath));
+    }
+
+    // Use the resolved value of usedEmails directly in the loop condition
     do {
         email = `${firstName}.${lastName}@patrolpulse.com`.toLowerCase();
     } while (usedEmails.has(email));
 
     usedEmails.add(email);
-    saveUsedEmails();
+    await saveUsedEmails();
 
     return email;
 };
 
-function loadUsedEmails(): Set<string> {
+async function loadUsedEmails(): Promise<Set<string>> {
     try {
-        const data = fs.readFileSync(usedEmailsFileName, 'utf-8');
+        const data = await fs.readFile(usedEmailsFileName, 'utf-8');
         const emailsArray = data.split('\n').map((email) => email.trim());
         return new Set(emailsArray);
     } catch (error) {
@@ -99,10 +142,10 @@ function loadUsedEmails(): Set<string> {
     }
 }
 
-function saveUsedEmails() {
+async function saveUsedEmails(): Promise<void> {
     const emailsArray = Array.from(usedEmails);
     const emailsString = emailsArray.join('\n');
-    fs.writeFileSync(usedEmailsFileName, emailsString, 'utf-8');
+    await fs.writeFile(usedEmailsFileName, emailsString, 'utf-8');
 }
 
 export const generateRandomLastName = (): string => {
